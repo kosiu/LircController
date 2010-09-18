@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Lirc Remote Controller</string>
+    <string name="weather">This is tab</string>
+    <string name="faces">This is tab</string>
+</resources>

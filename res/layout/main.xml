@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+
+
+
+	<RelativeLayout
+		android:id="@+id/amarok"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+		<ImageButton
+			android:id="@+id/a_pause"
+			android:layout_marginTop="20dip"
+			android:layout_centerHorizontal="true"
+			android:layout_width="106dip"
+			android:layout_height="70dip"
+			android:src="@drawable/bt_pause"/>
+		<ImageButton
+			android:id="@+id/a_play"
+			android:layout_toLeftOf="@id/a_pause"
+			android:layout_alignTop="@id/a_pause"
+			android:layout_width="106dip"
+			android:layout_height="70dip"
+			android:src="@drawable/bt_play"/>
+		<ImageButton
+			android:id="@+id/a_stop"
+			android:layout_toRightOf="@id/a_pause"
+			android:layout_alignTop="@id/a_pause"
+			android:layout_width="106dip"
+			android:layout_height="70dip"
+			android:src="@drawable/bt_stop"/>
+		<ImageButton
+			android:id="@+id/a_prev"
+			android:layout_toLeftOf="@id/a_pause"
+			android:layout_below ="@id/a_pause"
+			android:layout_width="106dip"
+			android:layout_height="70dip"
+			android:src="@drawable/bt_prev"/>
+		<ImageButton
+			android:id="@+id/a_next"
+			android:layout_toRightOf="@id/a_pause"
+			android:layout_below="@id/a_pause"
+			android:layout_width="106dip"
+			android:layout_height="70dip"
+			android:src="@drawable/bt_next"/>
+		<ImageButton
+			android:id="@+id/a_vol_mute"
+			android:layout_below="@id/a_next"
+			android:layout_centerHorizontal="true"
+			android:layout_width="106dip"
+			android:layout_height="70dip"
+			android:src="@drawable/bt_mute"/>
+		<ImageButton
+			android:id="@+id/a_vol_down"
+			android:layout_toLeftOf="@id/a_vol_mute"
+			android:layout_alignTop="@id/a_vol_mute"
+			android:layout_width="106dip"
+			android:layout_height="70dip"
+			android:src="@drawable/bt_volume_down"/>
+		<ImageButton
+			android:id="@+id/a_vol_up"
+			android:layout_toRightOf="@id/a_vol_mute"
+			android:layout_alignTop="@id/a_vol_mute"
+			android:layout_width="106dip"
+			android:layout_height="70dip"
+			android:src="@drawable/bt_volume_up"/>
+	</RelativeLayout>
+
+
+
+		<RelativeLayout
+		android:id="@+id/caffeine"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+		<ImageButton
+			android:id="@+id/k_pause"
+			android:layout_marginTop="20dip"
+			android:layout_centerHorizontal="true"
+			android:layout_width="106dip"
+			android:layout_height="70dip"
+			android:src="@drawable/bt_pause"/>
+		<ImageButton
+			android:id="@+id/k_revind"
+			android:layout_toLeftOf="@id/k_pause"
+			android:layout_alignTop="@id/k_pause"
+			android:layout_width="106dip"
+			android:layout_height="70dip"
+			android:src="@drawable/bt_revind"/>
+		<ImageButton
+			android:id="@+id/k_forward"
+			android:layout_toRightOf="@id/k_pause"
+			android:layout_alignTop="@id/k_pause"
+			android:layout_width="106dip"
+			android:layout_height="70dip"
+			android:src="@drawable/bt_forward"/>
+		<ImageButton
+			android:id="@+id/k_prev"
+			android:layout_toLeftOf="@id/k_pause"
+			android:layout_below ="@id/k_pause"
+			android:layout_width="106dip"
+			android:layout_height="70dip"
+			android:src="@drawable/bt_prev_text"/>
+		<ImageButton
+			android:id="@+id/k_next"
+			android:layout_toRightOf="@id/k_pause"
+			android:layout_below="@id/k_pause"
+			android:layout_width="106dip"
+			android:layout_height="70dip"
+			android:src="@drawable/bt_next_text"/>
+		<ImageButton
+			android:id="@+id/k_vol_mute"
+			android:layout_below="@id/k_next"
+			android:layout_centerHorizontal="true"
+			android:layout_width="106dip"
+			android:layout_height="70dip"
+			android:src="@drawable/bt_mute"/>
+		<ImageButton
+			android:id="@+id/k_vol_down"
+			android:layout_toLeftOf="@id/k_vol_mute"
+			android:layout_alignTop="@id/k_vol_mute"
+			android:layout_width="106dip"
+			android:layout_height="70dip"
+			android:src="@drawable/bt_volume_down"/>
+		<ImageButton
+			android:id="@+id/k_vol_up"
+			android:layout_toRightOf="@id/k_vol_mute"
+			android:layout_alignTop="@id/k_vol_mute"
+			android:layout_width="106dip"
+			android:layout_height="70dip"
+			android:src="@drawable/bt_volume_up"/>
+	</RelativeLayout>
+
+
+
+	<RelativeLayout
+		android:id="@+id/leave"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+		<ImageButton
+			android:id="@+id/p_poweroff"
+			android:layout_marginTop="10dip"
+			android:layout_centerHorizontal="true"
+			android:layout_width="106dip"
+			android:layout_height="70dip"
+			android:src="@drawable/tab_shutdown"/>
+	</RelativeLayout>
+
+
+</FrameLayout>
+
+
