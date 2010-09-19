@@ -7,7 +7,7 @@
 
 
 	<RelativeLayout
-		android:id="@+id/amarok"
+		android:id="@+id/audio"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
 		<ImageButton
@@ -71,7 +71,7 @@
 
 
 		<RelativeLayout
-		android:id="@+id/caffeine"
+		android:id="@+id/video"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
 		<ImageButton

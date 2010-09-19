@@ -24,14 +24,14 @@ public class LircController extends TabActivity {
         
         LayoutInflater.from(this).inflate(R.layout.main, tabHost.getTabContentView(), true);
 
-        tabHost.addTab(tabHost.newTabSpec("amarok")
-                .setIndicator("Amarok", getResources().getDrawable(R.drawable.tab_amarok))
-                .setContent(R.id.amarok));
-        tabHost.addTab(tabHost.newTabSpec("caffeine")
-                .setIndicator("SMPlayer", getResources().getDrawable(R.drawable.tab_kaffeine))
-                .setContent(R.id.caffeine));
+        tabHost.addTab(tabHost.newTabSpec("audio")
+                .setIndicator(getText(R.string.audio), getResources().getDrawable(R.drawable.tab_amarok))
+                .setContent(R.id.audio));
+        tabHost.addTab(tabHost.newTabSpec("video")
+                .setIndicator(getText(R.string.video), getResources().getDrawable(R.drawable.tab_kaffeine))
+                .setContent(R.id.video));
         tabHost.addTab(tabHost.newTabSpec("leave")
-                .setIndicator("Leave", getResources().getDrawable(R.drawable.tab_shutdown))
+                .setIndicator(getText(R.string.leave), getResources().getDrawable(R.drawable.tab_shutdown))
                 .setContent(R.id.leave));
     
         
