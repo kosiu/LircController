@@ -4,4 +4,8 @@
     <string name="audio">Amarok</string>
     <string name="video">SMPlayer</string>
 	<string name="leave">Leave</string>
+	<string name="menu_config">Configuration</string>
+	<string name="lirc_ip">PC address</string>
+	<string name="lirc_port">Lircd port</string>
+	<string name="PC_config">Your PC inforamtion</string>
 </resources>

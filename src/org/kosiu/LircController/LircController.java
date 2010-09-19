@@ -5,14 +5,20 @@ import java.util.Iterator;
 
 import android.app.Activity;
 import android.app.TabActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TabHost;
 
 //TODO: when unknown command app crashes
 public class LircController extends TabActivity {
+
+    private static final int INSERT_ID = Menu.FIRST;
+  
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +78,29 @@ public class LircController extends TabActivity {
         		});
         	}
         }    
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        menu.add(0, INSERT_ID, 0, R.string.menu_config);
+        return true;
+    }
+   
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch(item.getItemId()) {
+            case INSERT_ID:
+                showConfig();
+                return true;
+        }
+
+        return super.onMenuItemSelected(featureId, item);
+    }
+
+    private void showConfig() {
+        Intent i = new Intent(this, Preferences.class);
+        startActivity(i);
     }
 
 }
