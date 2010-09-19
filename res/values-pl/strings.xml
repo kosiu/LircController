@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Lirc Kontroler</string>
+    <string name="audio">Amarok</string>
+    <string name="video">SMPlayer</string>
+	<string name="leave">Opuść</string>
+</resources>
