@@ -20,7 +20,7 @@ import android.widget.TabHost;
 //TODO: when unknown command app crashes
 public class LircController extends TabActivity {
 
-	//menu button
+	//menu button IDs I don't get this... :/
     private static final int INSERT_ID = Menu.FIRST;
     private static final int TEST_ID = Menu.CATEGORY_SECONDARY;
    
@@ -49,6 +49,7 @@ public class LircController extends TabActivity {
         final Connection connection = new Connection((Activity)this);
         
         //hash maps store button id from xml file and lirc signal name
+        //this should be generated automatically but I have to remove XML file
         final HashMap<Integer, String> list = new HashMap<Integer, String>();
         
         list.put(R.id.a_vol_down,		"G_VOL_DOWN");
@@ -79,7 +80,7 @@ public class LircController extends TabActivity {
         	if (button != null){
         		button.setOnClickListener(new OnClickListener() {
         			public void onClick(View v) {
-        				connection.seandCommand(list.get(key));
+        				connection.seandLircCmd(list.get(key));
         			}
         		});
         	}
@@ -106,7 +107,7 @@ public class LircController extends TabActivity {
             case TEST_ID:
             	//Test: read plots
             	Connection connection = new Connection((Activity)this);
-            	connection.readKeys("Android");
+            	connection.readPilots();
         }
 
         return super.onMenuItemSelected(featureId, item);

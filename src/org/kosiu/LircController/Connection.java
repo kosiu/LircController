@@ -14,28 +14,71 @@ import java.util.Iterator;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-//import android.widget.Toast;
 
 public class Connection {
-//	LircdConfig lircdConfig = null;
-	Activity mParent = null;
+	private Activity mParent = null;
 
 	//in and out
-	PrintWriter out = null;
-	BufferedReader in = null;
-	Socket server = null;
-	
+	private PrintWriter mHostWriter = null;
+	private BufferedReader mHostReader = null;
+	private Socket mHostSocket = null;
+
+	//Constructor
 	Connection(Activity parent){
 		mParent = parent;
-//		lircdConfig = new LircdConfig(parent);
+	}
+
+	//opening socket
+	private int openSocket(){
+		try {
+			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mParent.getApplicationContext());
+			Integer port = Integer.parseInt(pref.getString("lirc_port","8765"));
+			if (port == null) port = 8765;
+			mHostSocket = new Socket(pref.getString("lirc_ip","0.0.0.0"), port);		
+			mHostWriter = new PrintWriter(mHostSocket.getOutputStream(), true);
+			mHostReader = new BufferedReader(new InputStreamReader(mHostSocket.getInputStream()));
+			return(0);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			mHostWriter = null;
+			mHostReader = null;
+			mHostSocket = null;
+			return(-1);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			mHostWriter = null;
+			mHostReader = null;
+			mHostSocket = null;
+			return(-1);
+		}
+
+	}
+
+	//closing socket
+	private void closeSocket() {
+		try {
+			if(mHostWriter!=null) mHostWriter.close();
+			if(mHostReader!=null) mHostReader.close();
+			if(mHostSocket!=null) mHostSocket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+		mHostWriter = null;
+		mHostReader = null;
+		mHostSocket = null;
 	}
 	
-	List<String> readPilots(){
+	//reading list of Pilots
+	public List<String> readPilots(){
 		List<String> list = readList("LIST");
 		return list;
 	}
 	
-	HashMap<String, String> readKeys(String pilot){
+	//reading HashMap of buttons names and their codes
+	private HashMap<String, String> readKeys(String pilot){
 		String listStr = new String("LIST ");
 		List<String> list = readList(listStr.concat(pilot));
         Iterator<String> it=list.iterator();
@@ -51,18 +94,18 @@ public class Connection {
 		return codes;
 	}
 	
-
-	List<String> readList(String command) {
+	//general function used for readKeys and readPilots
+	private List<String> readList(String command) {
 		List<String> list=new ArrayList<String>();
 		if(openSocket()==0){
-			out.println(command);
+			mHostWriter.println(command);
 			String linia;
 
 			//TODO: Enum: 1 - DATA,
 			int find = 1;
 			try {
 				do {
-					linia = in.readLine();
+					linia = mHostReader.readLine();
 					switch(find){
 					case 1:
 						if(linia.equals("DATA")){
@@ -76,8 +119,6 @@ public class Connection {
 					case 3:
 						if(!linia.equals("END")){
 							list.add(linia);
-							//Toast.makeText(mParent.getApplicationContext(),
-							//		linia, Toast.LENGTH_SHORT).show();
 						}
 						break;
 					}
@@ -91,7 +132,8 @@ public class Connection {
 		return list;
 	}
 	
-	void seandCommand(String command){
+	//send complete command to host with given button name 
+	public void seandLircCmd(String command){
 		if(openSocket()==0){
 			String fullCommand = "SIMULATE ";
 			HashMap<String, String> keyList = readKeys("Android");
@@ -101,49 +143,9 @@ public class Connection {
 			fullCommand = fullCommand.concat(command);
 			fullCommand = fullCommand.concat(" ");
 			fullCommand = fullCommand.concat("Android");
-			out.println(fullCommand);
+			mHostWriter.println(fullCommand);
 		}
 		closeSocket();
 	}
 
-	int openSocket(){
-		try {
-			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mParent.getApplicationContext());
-			Integer port = Integer.parseInt(pref.getString("lirc_port","8765"));
-			if (port == null) port = 8765;
-			server = new Socket(pref.getString("lirc_ip","0.0.0.0"), port);		
-			out = new PrintWriter(server.getOutputStream(), true);
-			in = new BufferedReader(new InputStreamReader(server.getInputStream()));
-			return(0);
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			out = null;
-			in = null;
-			server = null;
-			return(-1);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			out = null;
-			in = null;
-			server = null;
-			return(-1);
-		}
-
-	}
-
-	void closeSocket() {
-		try {
-			if(out!=null) out.close();
-			if(in!=null) in.close();
-			if(server!=null) server.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		}
-		out = null;
-		in = null;
-		server = null;
-	}
 }
