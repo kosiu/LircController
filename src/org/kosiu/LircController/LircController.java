@@ -14,18 +14,23 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TabHost;
 
+//Main activity (window) based on tabs, right now three
+//tabs are implemented
+
 //TODO: when unknown command app crashes
 public class LircController extends TabActivity {
 
+	//menu button
     private static final int INSERT_ID = Menu.FIRST;
+    private static final int TEST_ID = Menu.CATEGORY_SECONDARY;
+   
   
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.main);
         
-
+        //three tabs
         TabHost tabHost = getTabHost();
         
         LayoutInflater.from(this).inflate(R.layout.main, tabHost.getTabContentView(), true);
@@ -39,11 +44,11 @@ public class LircController extends TabActivity {
         tabHost.addTab(tabHost.newTabSpec("leave")
                 .setIndicator(getText(R.string.leave), getResources().getDrawable(R.drawable.tab_shutdown))
                 .setContent(R.id.leave));
-    
-        
-        
+            
+        //creating new connection class witch handle communication with host 
         final Connection connection = new Connection((Activity)this);
         
+        //hash maps store button id from xml file and lirc signal name
         final HashMap<Integer, String> list = new HashMap<Integer, String>();
         
         list.put(R.id.a_vol_down,		"G_VOL_DOWN");
@@ -64,9 +69,10 @@ public class LircController extends TabActivity {
         list.put(R.id.k_next,			"K_NEXT");
         list.put(R.id.k_prev,			"K_PREV");
         
-        
+        //iterator to list
         Iterator<Integer> listIt = list.keySet().iterator();
-         
+        
+        //setting up on click listener for each button
         while(listIt.hasNext()){
         	final int key = listIt.next();
         	View button = findViewById(key);
@@ -80,24 +86,33 @@ public class LircController extends TabActivity {
         }    
     }
 
+    
+    //two buttons in menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         menu.add(0, INSERT_ID, 0, R.string.menu_config);
+        menu.add(0, TEST_ID, 0, "test"); 
         return true;
     }
-   
+
+    //when those button clicked
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch(item.getItemId()) {
             case INSERT_ID:
                 showConfig();
                 return true;
+            case TEST_ID:
+            	//Test: read plots
+            	Connection connection = new Connection((Activity)this);
+            	connection.readKeys("Android");
         }
 
         return super.onMenuItemSelected(featureId, item);
     }
 
+    //showing configuration activity
     private void showConfig() {
         Intent i = new Intent(this, Preferences.class);
         startActivity(i);
