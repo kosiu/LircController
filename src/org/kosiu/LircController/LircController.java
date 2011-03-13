@@ -20,10 +20,6 @@ import android.widget.TabHost;
 //TODO: when unknown command app crashes
 public class LircController extends TabActivity {
 
-	//menu button IDs I don't get this... :/
-    private static final int INSERT_ID = Menu.FIRST;
-    private static final int TEST_ID = Menu.CATEGORY_SECONDARY;
-   
   
     /** Called when the activity is first created. */
     @Override
@@ -92,23 +88,23 @@ public class LircController extends TabActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(0, INSERT_ID, 0, R.string.menu_config);
-        menu.add(0, TEST_ID, 0, "test"); 
-        return true;
+        menu.add(0, 1, 0, R.string.menu_config);
+        menu.add(0, 2, 0, "test");
+       return true;
     }
 
     //when those button clicked
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
         switch(item.getItemId()) {
-            case INSERT_ID:
+            case 1:
                 showConfig();
                 return true;
-            case TEST_ID:
+            case 2:
             	//Test: read plots
-            	Connection connection = new Connection((Activity)this);
-            	connection.readPilots();
-        }
+            	showTestWindow();
+            	return true;
+      }
 
         return super.onMenuItemSelected(featureId, item);
     }
@@ -119,4 +115,10 @@ public class LircController extends TabActivity {
         startActivity(i);
     }
 
+    //showing configuration activity
+    private void showTestWindow() {
+        Intent i = new Intent(this, TestActivity.class);
+        startActivity(i);
+    }
+    
 }

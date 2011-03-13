@@ -17,6 +17,7 @@ import android.preference.PreferenceManager;
 
 public class Connection {
 	private Activity mParent = null;
+	SharedPreferences mPref = null;
 
 	//in and out
 	private PrintWriter mHostWriter = null;
@@ -26,15 +27,14 @@ public class Connection {
 	//Constructor
 	Connection(Activity parent){
 		mParent = parent;
+		mPref = PreferenceManager.getDefaultSharedPreferences(mParent.getApplicationContext());
 	}
 
 	//opening socket
 	private int openSocket(){
 		try {
-			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mParent.getApplicationContext());
-			Integer port = Integer.parseInt(pref.getString("lirc_port","8765"));
-			if (port == null) port = 8765;
-			mHostSocket = new Socket(pref.getString("lirc_ip","0.0.0.0"), port);		
+			Integer port = Integer.parseInt(mPref.getString("lirc_port",""));
+			mHostSocket = new Socket(mPref.getString("lirc_ip",""), port);		
 			mHostWriter = new PrintWriter(mHostSocket.getOutputStream(), true);
 			mHostReader = new BufferedReader(new InputStreamReader(mHostSocket.getInputStream()));
 			return(0);
@@ -78,7 +78,7 @@ public class Connection {
 	}
 	
 	//reading HashMap of buttons names and their codes
-	private HashMap<String, String> readKeys(String pilot){
+	public HashMap<String, String> readKeys(String pilot){
 		String listStr = new String("LIST ");
 		List<String> list = readList(listStr.concat(pilot));
         Iterator<String> it=list.iterator();

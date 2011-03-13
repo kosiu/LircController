@@ -12,12 +12,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".Preferences" />
+        <activity android:name=".TabsPreferences" />
+        <activity android:name=".ButtonPreferences" />
+        <activity android:name=".TestActivity" />
     </application>
-
-
-
-
-
 
 <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest> 

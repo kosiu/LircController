@@ -7,5 +7,14 @@
 	<string name="menu_config">Configuration</string>
 	<string name="lirc_ip">PC address</string>
 	<string name="lirc_port">Lircd port</string>
-	<string name="PC_config">Your PC inforamtion</string>
+	<string name="pc_config">Your PC inforamtion</string>
+<string name="tabs_config">Tabs</string>
+<string name="numberOfTabs">Nuber Of Tabs</string>
+<string name="click_to_configure">Click to Configure tab</string>
+<string name="tab">Tab</string>
+<string name="tab_name">Tab name</string>
+<string name="numberOfButtons">Number of buttons</string>
+<string name="click_to_configure_button">Click To Configure Button</string>
+<string name="change_signal">Change signal</string>
+<string name="set_signal">Set Signal</string>
 </resources>
