@@ -9,6 +9,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.text.method.DigitsKeyListener;
+import android.app.Activity;
 import android.content.Intent;
 
 //Preferences (configuration) activity, right now store
@@ -17,11 +18,13 @@ public class Preferences extends PreferenceActivity {
 
 	//Place to store new number of tabs
 	Integer mTabsNumber=null;
+	Activity mActivity = null;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setPreferenceScreen(createPreferenceHierarchy());
+        mActivity = this;
     }
 	
     private PreferenceScreen createPreferenceHierarchy() {
@@ -41,7 +44,6 @@ public class Preferences extends PreferenceActivity {
         lircIp.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
         	public boolean onPreferenceChange(Preference preference, Object newValue){
         		lircIp.setSummary((String)newValue);
-        		//TODO: check if its correct address
 				return true;
         	}        	
         });
@@ -58,7 +60,8 @@ public class Preferences extends PreferenceActivity {
         lircPort.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
         	public boolean onPreferenceChange(Preference preference, Object newValue){
         		lircPort.setSummary((String)newValue);
-        		//TODO: check if it's number between 1 and ???
+        		lircIp.setSummary((String)newValue);
+        		
 				return true;
         	}        	
         });
@@ -100,6 +103,38 @@ public class Preferences extends PreferenceActivity {
         numberOfTabs.setSummary(mTabsNumber.toString());
         
         makeTabs(mTabsNumber, root);
+        
+        // Tabs category
+        PreferenceCategory impCat = new PreferenceCategory(this);
+        impCat.setTitle(R.string.tabs_config);
+        root.addPreference(impCat);
+
+        // Export Preferences
+        final EditTextPreference expPref = new EditTextPreference(this);
+        expPref.setDialogTitle(R.string.expPref);
+        expPref.setTitle(R.string.expPref);
+        expPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+        	public boolean onPreferenceChange(Preference preference, Object newValue){
+        		StorePreferences storePreferences = new StorePreferences(mActivity);
+        		storePreferences.save(newValue.toString());
+        		return true;
+        	}        	
+        });
+        impCat.addPreference(expPref);
+       
+        
+        // Import Preferences
+        final EditTextPreference impPref = new EditTextPreference(this);
+        impPref.setDialogTitle(R.string.impPref);
+        impPref.setTitle(R.string.impPref);
+        impPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+        	public boolean onPreferenceChange(Preference preference, Object newValue){
+        		StorePreferences storePreferences = new StorePreferences(mActivity);
+        		storePreferences.load(newValue.toString());
+				return true;
+        	}        	
+        });
+        impCat.addPreference(impPref);
         
         return root;
     };

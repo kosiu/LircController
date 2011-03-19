@@ -17,4 +17,6 @@
 <string name="click_to_configure_button">Click To Configure Button</string>
 <string name="change_signal">Change signal</string>
 <string name="set_signal">Set Signal</string>
+<string name="expPref">Save Configuration on SD card</string>
+<string name="impPref">Load Configuration from SD card</string>
 </resources>
