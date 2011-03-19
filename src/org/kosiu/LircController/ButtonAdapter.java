@@ -68,7 +68,7 @@ public class ButtonAdapter extends BaseAdapter {
                 fullButtonName = fullButtonName.concat(", Tab: ");
                 fullButtonName = fullButtonName.concat(mTabNumber.toString());          	
                 fullButtonName = fullButtonName.concat("signalName");
-                String signal = mPref.getString(fullButtonName,"DUPA");
+                String signal = mPref.getString(fullButtonName,"");
                 connection.seandLircCmd(signal);
 
             }
