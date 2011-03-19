@@ -28,21 +28,21 @@ public class ButtonPreferences extends PreferenceActivity {
     private PreferenceScreen createPreferenceHierarchy() {
 
     	String[] splited = getIntent().getAction().split(" ");
-    	mTabNumber = Integer.parseInt(splited[0]);
-    	mButtonNumber = Integer.parseInt(splited[1]);
+    	mTabNumber = Integer.parseInt(splited[1]);
+    	mButtonNumber = Integer.parseInt(splited[0]);
     	Connection connection = new Connection(this);
     	
         String fullButtonName = new String("Button: ");
-        fullButtonName = fullButtonName.concat(mTabNumber.toString());
-        fullButtonName = fullButtonName.concat(", Tab: ");
         fullButtonName = fullButtonName.concat(mButtonNumber.toString());
+        fullButtonName = fullButtonName.concat(", Tab: ");
+        fullButtonName = fullButtonName.concat(mTabNumber.toString());
         
     	// Root
         PreferenceScreen root = getPreferenceManager().createPreferenceScreen(this);
 
         // Server category
         PreferenceCategory tabsConf = new PreferenceCategory(this);
-        tabsConf.setTitle(splited[0]);
+        tabsConf.setTitle(mTabNumber.toString());
         root.addPreference(tabsConf);
 		              
         final EditTextPreference buttonName = new EditTextPreference(this);
