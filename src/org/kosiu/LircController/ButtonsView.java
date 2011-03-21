@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.GridView;
 
-//Main activity (window) based on tabs, right now three
-//tabs are implemented
+//Grid Layout to put buttons
+//this activity use ButtonAdapter
 
 //TODO: when unknown command app crashes
 public class ButtonsView extends Activity {
@@ -29,7 +29,6 @@ public class ButtonsView extends Activity {
 
 	    GridView gridview = (GridView) findViewById(R.id.buttonsView);
 	    gridview.setAdapter(new ButtonAdapter(this, mTabNumber, this));
-	    
-	    
+	    	    
     }	    
 }    

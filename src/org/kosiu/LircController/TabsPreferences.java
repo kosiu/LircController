@@ -1,12 +1,14 @@
 package org.kosiu.LircController;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.text.method.DigitsKeyListener;
@@ -14,13 +16,20 @@ import android.text.method.DigitsKeyListener;
 //TabPreferences (configuration) activity, handle tabs configuration
 public class TabsPreferences extends PreferenceActivity {
 
-	//Place to store new number of buttons
+	//Place to store new number of buttons in tab
 	Integer mButtonsNumber=null;
+	//Actual Tab
 	Integer mTabNumber = null;
+	//Place where configuration will be stored
+	SharedPreferences mPref = null;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+	    //setting configuration object 
+	    if(mPref==null){
+	    	mPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+	    }
         setPreferenceScreen(createPreferenceHierarchy());
     }
 	
@@ -31,15 +40,16 @@ public class TabsPreferences extends PreferenceActivity {
     	// Root
         PreferenceScreen root = getPreferenceManager().createPreferenceScreen(this);
 
-        // Server category
+        // Tabs category
         PreferenceCategory tabsConf = new PreferenceCategory(this);
         tabsConf.setTitle(R.string.tabs_config);
         root.addPreference(tabsConf);
 		      
-        
+
+        // Tab name
         final EditTextPreference tabName = new EditTextPreference(this);
         tabName.setDialogTitle(R.string.tab_name);
-        tabName.setKey(append("Tab"));
+        tabName.setKey(KeyParas.tabName(mTabNumber));
         tabName.setTitle(R.string.tab_name);
         tabName.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
         	public boolean onPreferenceChange(Preference preference, Object newValue){
@@ -48,7 +58,7 @@ public class TabsPreferences extends PreferenceActivity {
         	}        	
         });
         tabsConf.addPreference(tabName);
-        if(tabName.getText()==null) tabName.setText(append("Tab"));
+        if(tabName.getText()==null) tabName.setText(KeyParas.tabNameH(this, mTabNumber));
         tabName.setSummary(tabName.getText());
 
         
@@ -56,7 +66,7 @@ public class TabsPreferences extends PreferenceActivity {
         final EditTextPreference numberOfButtons = new EditTextPreference(this);
         numberOfButtons.getEditText().setKeyListener(new DigitsKeyListener());
         numberOfButtons.setDialogTitle(R.string.numberOfButtons);
-        numberOfButtons.setKey(append("numberOfButtons"));
+        numberOfButtons.setKey(KeyParas.buttNum(mTabNumber));
         numberOfButtons.setTitle(R.string.numberOfButtons);
         tabsConf.addPreference(numberOfButtons);
         if(numberOfButtons.getText()==null) numberOfButtons.setText("0");
@@ -65,7 +75,7 @@ public class TabsPreferences extends PreferenceActivity {
         		//checking if number is correct
         		Integer tmpButNum = Integer.parseInt(newValue.toString());
         		if (tmpButNum != null) {
-        			if (tmpButNum >= 0 && tmpButNum <= 6 ) {
+        			if (tmpButNum >= 0 && tmpButNum <= 50 ) {
         				numberOfButtons.setSummary((String)newValue);
         				mButtonsNumber = tmpButNum;
         				setPreferenceScreen(createPreferenceHierarchy());
@@ -91,21 +101,19 @@ public class TabsPreferences extends PreferenceActivity {
     		
 	        // Intent preference
 	        final PreferenceScreen buttonsPref = getPreferenceManager().createPreferenceScreen(this);
+	        String str = new String(mTabNumber.toString()).concat(" ").concat(i.toString());
 	        
 	        Uri uri = null;
-	        String appended = append(i.toString());
-	        buttonsPref.setIntent(new Intent(appended, uri, this, ButtonPreferences.class));
-	       
-	        String str = new Integer(i).toString();
-	        buttonsPref.setTitle(append(new String("Button: ").concat(str).concat(", Tab: ")));
+	        buttonsPref.setIntent(new Intent(str, uri, this, ButtonPreferences.class));
+	       	//TODO:Uptade button name when come back from button configuration        
+	        String buttonName = mPref.getString(KeyParas.tabBtn(mTabNumber, i).concat(" Name"), "");
+	        if(buttonName.equals("")) buttonName = KeyParas.tabBtnH(this, mTabNumber, i);
+	        buttonsPref.setTitle(buttonName);
+	        
 	        buttonsPref.setSummary(R.string.click_to_configure_button);
 	        tabsConf.addPreference(buttonsPref);
-        }
+    	}
     }
     
-    String append(String in){
-    	in = in.concat(" ");
-    	return in.concat(mTabNumber.toString());
-    }
 }
 

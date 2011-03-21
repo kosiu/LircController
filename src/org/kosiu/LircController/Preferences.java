@@ -6,29 +6,50 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.text.method.DigitsKeyListener;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 
-//Preferences (configuration) activity, right now store
-//server name an port
+//Main Preferences (configuration) activity, right now store
+//PC server name an port, tabs number and links to tabs configuration,
+//Storing and retrieving configuration to SD card
 public class Preferences extends PreferenceActivity {
 
 	//Place to store new number of tabs
-	Integer mTabsNumber=null;
+	Integer mTabsNumber = null;
+	//I like to have pointer to activity (in this case it's pointer
+	//to "this" object instance
 	Activity mActivity = null;
+	//Place where configuration will be stored
+	SharedPreferences mPref = null;
 	
+	//Overriding onCreate function
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setPreferenceScreen(createPreferenceHierarchy());
+
+        //see comment in initialization
         mActivity = this;
+
+	    //setting configuration object 
+	    if(mPref==null){
+	    	mPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+	    }
+
+        //Setting up PreferenceScreen.
+        setPreferenceScreen(createPreferenceHierarchy());
+
     }
+
 	
+	//loooooong linear function
     private PreferenceScreen createPreferenceHierarchy() {
-        // Root
+
+    	// Root of all evil.
         PreferenceScreen root = getPreferenceManager().createPreferenceScreen(this);
 
         // Server category
@@ -78,16 +99,16 @@ public class Preferences extends PreferenceActivity {
         final EditTextPreference numberOfTabs = new EditTextPreference(this);
         numberOfTabs.getEditText().setKeyListener(new DigitsKeyListener());
         numberOfTabs.setDialogTitle(R.string.numberOfTabs);
-        numberOfTabs.setKey("numberOfTabs");
+        numberOfTabs.setKey("Tab Quantity");
         numberOfTabs.setTitle(R.string.numberOfTabs);
         root.addPreference(numberOfTabs);
         if(numberOfTabs.getText()==null) numberOfTabs.setText("0");
-        numberOfTabs.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+        	numberOfTabs.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
         	public boolean onPreferenceChange(Preference preference, Object newValue){
         		//checking if number is correct
         		Integer tmpTabNum = Integer.parseInt(newValue.toString());
         		if (tmpTabNum != null) {
-        			if (tmpTabNum >= 0 && tmpTabNum <= 6 ) {
+        			if (tmpTabNum >= 0 && tmpTabNum <= 15 ) {
         				numberOfTabs.setSummary((String)newValue);
         				mTabsNumber = tmpTabNum;
         				setPreferenceScreen(createPreferenceHierarchy());
@@ -101,17 +122,18 @@ public class Preferences extends PreferenceActivity {
         	mTabsNumber = Integer.parseInt(numberOfTabs.getText().toString());
         }
         numberOfTabs.setSummary(mTabsNumber.toString());
-        
+
+        //make tabs
         makeTabs(mTabsNumber, root);
         
-        // Tabs category
+        //Export category
         PreferenceCategory impCat = new PreferenceCategory(this);
-        impCat.setTitle(R.string.tabs_config);
+        impCat.setTitle(R.string.exp_config);
         root.addPreference(impCat);
 
         // Export Preferences
         final EditTextPreference expPref = new EditTextPreference(this);
-        expPref.setDialogTitle(R.string.expPref);
+        expPref.setDialogTitle(R.string.filename);
         expPref.setTitle(R.string.expPref);
         expPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
         	public boolean onPreferenceChange(Preference preference, Object newValue){
@@ -125,7 +147,7 @@ public class Preferences extends PreferenceActivity {
         
         // Import Preferences
         final EditTextPreference impPref = new EditTextPreference(this);
-        impPref.setDialogTitle(R.string.impPref);
+        impPref.setDialogTitle(R.string.filename);
         impPref.setTitle(R.string.impPref);
         impPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
         	public boolean onPreferenceChange(Preference preference, Object newValue){
@@ -138,21 +160,22 @@ public class Preferences extends PreferenceActivity {
         
         return root;
     };
-   
+
+    //Making links to tab configuration
     void makeTabs(Integer tabsNumber, PreferenceScreen tabCat){
-    	for(Integer i=1;i<=tabsNumber;i++){
+    	for( Integer i=1; i<=tabsNumber; i++ ){
     		
 	        // Intent preference
 	        final PreferenceScreen tabsPref = getPreferenceManager().createPreferenceScreen(this);
 	        
 	        Uri uri = null;
 	        tabsPref.setIntent(new Intent(i.toString(), uri, this, TabsPreferences.class));
-	       
-	        String str = new Integer(i).toString();
-	        tabsPref.setTitle(new String("Tab ").concat(str));
+	        //TODO:Update title when come back from button preference
+	        String tabName = mPref.getString(KeyParas.tabName(i), "");
+	        if(tabName.equals("")) tabName = KeyParas.tabNameH(this, i);
+	        tabsPref.setTitle(tabName);
 	        tabsPref.setSummary(R.string.click_to_configure);
 	        tabCat.addPreference(tabsPref);
       }
     }
 }
-

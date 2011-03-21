@@ -17,6 +17,10 @@
 <string name="click_to_configure_button">Click To Configure Button</string>
 <string name="change_signal">Change signal</string>
 <string name="set_signal">Set Signal</string>
-<string name="expPref">Save Configuration on SD card</string>
-<string name="impPref">Load Configuration from SD card</string>
+<string name="expPref">Save on SD card</string>
+<string name="impPref">Load from SD card</string>
+<string name="exp_config">Import and export configuration</string>
+<string name="button">Button</string>
+<string name="buttonName">Button Name</string>
+<string name="filename">Enter filename</string>
 </resources>
