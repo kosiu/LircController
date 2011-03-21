@@ -1,8 +1,8 @@
 package org.kosiu.LircController;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -33,7 +33,14 @@ public class ButtonPreferences extends PreferenceActivity {
 	    }
         setPreferenceScreen(createPreferenceHierarchy());
 	}
-	
+
+	@Override
+    protected void onResume() {
+		super.onResume();
+		setPreferenceScreen(createPreferenceHierarchy());
+
+    }
+
     private PreferenceScreen createPreferenceHierarchy() {
 
     	String[] splited = getIntent().getAction().split(" ");
@@ -70,8 +77,9 @@ public class ButtonPreferences extends PreferenceActivity {
         if(buttonName.getText()==null) buttonName.setText(keyBaseH);
 
         List<String> pilots = connection.readPilots();
-        HashMap<String, String> commandMap = connection.readKeys(pilots.get(0));
+        Map<String, String> commandMap = connection.readKeys(pilots.get(0));
         Collection<String> arrayOfStrings = commandMap.keySet();
+        
         CharSequence[] adopted = arrayOfStrings.toArray(new CharSequence[arrayOfStrings.size()]);
 
         // Signal Name

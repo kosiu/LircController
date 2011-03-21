@@ -44,6 +44,14 @@ public class Preferences extends PreferenceActivity {
         setPreferenceScreen(createPreferenceHierarchy());
 
     }
+	
+	@Override
+    protected void onResume() {
+		super.onResume();
+		setPreferenceScreen(createPreferenceHierarchy());
+
+    }
+	
 
 	
 	//loooooong linear function

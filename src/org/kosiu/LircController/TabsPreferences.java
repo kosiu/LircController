@@ -33,6 +33,13 @@ public class TabsPreferences extends PreferenceActivity {
         setPreferenceScreen(createPreferenceHierarchy());
     }
 	
+	@Override
+    protected void onResume() {
+		super.onResume();
+		setPreferenceScreen(createPreferenceHierarchy());
+
+    }
+
     private PreferenceScreen createPreferenceHierarchy() {
 
     	mTabNumber = Integer.parseInt(getIntent().getAction());
