@@ -1,18 +1,15 @@
 package org.kosiu.LircController;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.widget.GridView;
 
 //Grid Layout to put buttons
 //this activity use ButtonAdapter
 
-//TODO: when unknown command app crashes
 public class ButtonsView extends Activity {
 	
-	SharedPreferences mPref = null;
+	Conf mConf = null;
 	Integer mTabNumber = null;
 	
 	@Override
@@ -21,14 +18,10 @@ public class ButtonsView extends Activity {
 	    
 	    mTabNumber = Integer.parseInt(getIntent().getAction());
         setContentView(R.layout.buttons_view);
-        mPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-
-	    if(mPref==null){
-	    	mPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-	    }
+        if(mConf==null) mConf = new Conf(this);
 
 	    GridView gridview = (GridView) findViewById(R.id.buttonsView);
-	    gridview.setAdapter(new ButtonAdapter(this, mTabNumber, this));
+	    gridview.setAdapter(new ButtonAdapter(mTabNumber, this));
 	    	    
     }	    
 }    

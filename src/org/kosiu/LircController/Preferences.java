@@ -6,13 +6,11 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
-import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.text.method.DigitsKeyListener;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 
 //Main Preferences (configuration) activity, right now store
 //PC server name an port, tabs number and links to tabs configuration,
@@ -21,35 +19,34 @@ public class Preferences extends PreferenceActivity {
 
 	//Place to store new number of tabs
 	Integer mTabsNumber = null;
-	//I like to have pointer to activity (in this case it's pointer
-	//to "this" object instance
-	Activity mActivity = null;
 	//Place where configuration will be stored
-	SharedPreferences mPref = null;
+	Conf mConf = null;
+	//Activity for listener functions
+	Activity mActivity = null;
 	
 	//Overriding onCreate function
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //see comment in initialization
-        mActivity = this;
-
 	    //setting configuration object 
-	    if(mPref==null){
-	    	mPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-	    }
+	    if(mConf==null) mConf = new Conf(this);
+	    //setting activity
+	    if(mActivity==null) mActivity = this;
 
-        //Setting up PreferenceScreen.
+	    //Setting up PreferenceScreen.
         setPreferenceScreen(createPreferenceHierarchy());
-
     }
 	
 	@Override
     protected void onResume() {
 		super.onResume();
+	    //setting configuration object 
+	    if(mConf==null) mConf = new Conf(this);
+	    //setting activity
+	    if(mActivity==null) mActivity = this;
+		//redrawing
 		setPreferenceScreen(createPreferenceHierarchy());
-
     }
 	
 
@@ -107,7 +104,7 @@ public class Preferences extends PreferenceActivity {
         final EditTextPreference numberOfTabs = new EditTextPreference(this);
         numberOfTabs.getEditText().setKeyListener(new DigitsKeyListener());
         numberOfTabs.setDialogTitle(R.string.numberOfTabs);
-        numberOfTabs.setKey("Tab Quantity");
+        numberOfTabs.setKey(mConf.nrTabsKey());
         numberOfTabs.setTitle(R.string.numberOfTabs);
         root.addPreference(numberOfTabs);
         if(numberOfTabs.getText()==null) numberOfTabs.setText("0");
@@ -178,9 +175,8 @@ public class Preferences extends PreferenceActivity {
 	        
 	        Uri uri = null;
 	        tabsPref.setIntent(new Intent(i.toString(), uri, this, TabsPreferences.class));
-	        //TODO:Update title when come back from button preference
-	        String tabName = mPref.getString(KeyParas.tabName(i), "");
-	        if(tabName.equals("")) tabName = KeyParas.tabNameH(this, i);
+
+	        String tabName = mConf.tabName(i);
 	        tabsPref.setTitle(tabName);
 	        tabsPref.setSummary(R.string.click_to_configure);
 	        tabCat.addPreference(tabsPref);

@@ -4,14 +4,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
-import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
 
@@ -22,21 +20,21 @@ public class ButtonPreferences extends PreferenceActivity {
 	Integer mButtonNumber = null;
 	Integer mTabNumber = null;
 	//Place where configuration will be stored
-	SharedPreferences mPref = null;
+	Conf mConf = null;
 
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-	    if(mPref==null){
-	    	mPref = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-	    }
+	    if(mConf==null)	mConf = new Conf(this);
+	    
         setPreferenceScreen(createPreferenceHierarchy());
 	}
 
 	@Override
     protected void onResume() {
 		super.onResume();
+
 		setPreferenceScreen(createPreferenceHierarchy());
 
     }
@@ -47,10 +45,6 @@ public class ButtonPreferences extends PreferenceActivity {
     	mTabNumber = Integer.parseInt(splited[0]);
     	mButtonNumber = Integer.parseInt(splited[1]);
     	Connection connection = new Connection(this);
-    	
-        String keyBase = KeyParas.tabBtn(mTabNumber, mButtonNumber);
-        String keyBaseH = KeyParas.tabBtnH(this, mTabNumber, mButtonNumber);
-        
         
     	// Root
         PreferenceScreen root = getPreferenceManager().createPreferenceScreen(this);
@@ -62,11 +56,9 @@ public class ButtonPreferences extends PreferenceActivity {
 		              
         final EditTextPreference buttonName = new EditTextPreference(this);
         buttonName.setDialogTitle(R.string.buttonName);
-        buttonName.setKey(keyBase.concat(" Name"));
+        buttonName.setKey(mConf.buttNameKey(mTabNumber, mButtonNumber));
         buttonName.setTitle(R.string.buttonName);
-        String appended = keyBase.concat(" Name");
-        String summary = mPref.getString(appended, " ");
-        buttonName.setSummary(summary);
+        buttonName.setSummary(mConf.buttName(mTabNumber, mButtonNumber));
         buttonName.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
         	public boolean onPreferenceChange(Preference preference, Object newValue){
         		buttonName.setSummary((String)newValue);
@@ -74,7 +66,7 @@ public class ButtonPreferences extends PreferenceActivity {
         	}        	
         });
         tabsConf.addPreference(buttonName);
-        if(buttonName.getText()==null) buttonName.setText(keyBaseH);
+        if(buttonName.getText()==null) buttonName.setText(mConf.buttName(mTabNumber, mButtonNumber));
 
         List<String> pilots = connection.readPilots();
         Map<String, String> commandMap = connection.readKeys(pilots.get(0));
@@ -82,11 +74,13 @@ public class ButtonPreferences extends PreferenceActivity {
         
         CharSequence[] adopted = arrayOfStrings.toArray(new CharSequence[arrayOfStrings.size()]);
 
+        
+        
         // Signal Name
         final ListPreference listPref = new ListPreference(this);
         listPref.setEntries(adopted);
         listPref.setEntryValues(adopted);
-        listPref.setKey(keyBase.concat(" Signal"));
+        listPref.setKey(mConf.buttSigKey(mTabNumber, mButtonNumber));
         listPref.setDialogTitle(R.string.change_signal);
         listPref.setTitle(R.string.set_signal);
         listPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
