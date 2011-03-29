@@ -23,4 +23,5 @@
 <string name="button">Button</string>
 <string name="buttonName">Button Name</string>
 <string name="filename">Enter filename</string>
+<string name="button_type">Button type</string>
 </resources>

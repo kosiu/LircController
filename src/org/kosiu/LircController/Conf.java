@@ -88,7 +88,14 @@ public class Conf extends Object {
 	public String buttSig(Integer tab, Integer button){
 		return mPref.getString(buttSigKey(tab,button), "");
 	}
-	
+
+	//Button Type
+	public String buttTypKey(Integer tab, Integer button){
+		return tabBtn(tab, button).concat(" Type");
+	}
+	public String buttTyp(Integer tab, Integer button){	
+		return mPref.getString(buttTypKey(tab,button), "");
+	}
 	
 	//PRIVATE -----------------------------------------------------
 	

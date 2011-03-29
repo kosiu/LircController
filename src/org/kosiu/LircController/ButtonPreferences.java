@@ -21,14 +21,27 @@ public class ButtonPreferences extends PreferenceActivity {
 	Integer mTabNumber = null;
 	//Place where configuration will be stored
 	Conf mConf = null;
-
+	//Signal config dialog visibility
+	boolean mShowSignal = false;
+	//Button type
+	String mButtonType = null;
+	Connection mConnection = null;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 	    if(mConf==null)	mConf = new Conf(this);
-	    
+
+    	String[] splited = getIntent().getAction().split(" ");
+    	mTabNumber = Integer.parseInt(splited[0]);
+    	mButtonNumber = Integer.parseInt(splited[1]);
+    	mConnection = new Connection(this);
+
+        if(mButtonType == null) setMembers( mConf.buttTyp(mTabNumber, mButtonNumber) );
+
         setPreferenceScreen(createPreferenceHierarchy());
+
+        
 	}
 
 	@Override
@@ -37,14 +50,11 @@ public class ButtonPreferences extends PreferenceActivity {
 
 		setPreferenceScreen(createPreferenceHierarchy());
 
+		
     }
 
     private PreferenceScreen createPreferenceHierarchy() {
 
-    	String[] splited = getIntent().getAction().split(" ");
-    	mTabNumber = Integer.parseInt(splited[0]);
-    	mButtonNumber = Integer.parseInt(splited[1]);
-    	Connection connection = new Connection(this);
         
     	// Root
         PreferenceScreen root = getPreferenceManager().createPreferenceScreen(this);
@@ -68,31 +78,66 @@ public class ButtonPreferences extends PreferenceActivity {
         tabsConf.addPreference(buttonName);
         if(buttonName.getText()==null) buttonName.setText(mConf.buttName(mTabNumber, mButtonNumber));
 
-        List<String> pilots = connection.readPilots();
-        Map<String, String> commandMap = connection.readKeys(pilots.get(0));
+        List<String> pilots = mConnection.readPilots();
+        Map<String, String> commandMap = mConnection.readKeys(pilots.get(0));
         Collection<String> arrayOfStrings = commandMap.keySet();
+               
+        // Button type
         
-        CharSequence[] adopted = arrayOfStrings.toArray(new CharSequence[arrayOfStrings.size()]);
-
-        
-        
-        // Signal Name
-        final ListPreference listPref = new ListPreference(this);
-        listPref.setEntries(adopted);
-        listPref.setEntryValues(adopted);
-        listPref.setKey(mConf.buttSigKey(mTabNumber, mButtonNumber));
-        listPref.setDialogTitle(R.string.change_signal);
-        listPref.setTitle(R.string.set_signal);
-        listPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+        CharSequence[] typeList = {"No button", "Text button"};
+        final ListPreference butonType = new ListPreference(this);
+        butonType.setEntries(typeList);
+        butonType.setEntryValues(typeList);
+        butonType.setKey(mConf.buttTypKey(mTabNumber, mButtonNumber));
+        butonType.setDialogTitle(R.string.button_type);
+        butonType.setTitle(R.string.button_type);
+        butonType.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
         	public boolean onPreferenceChange(Preference preference, Object newValue){
-        		listPref.setSummary((String)newValue);
+        		setMembers(newValue.toString());
+                butonType.setSummary(mButtonType);
+        		setPreferenceScreen(createPreferenceHierarchy());
 				return true;
         	}        	
         });
-        tabsConf.addPreference(listPref);
-        listPref.setSummary(listPref.getEntry());
+        butonType.setSummary(mButtonType);
+        tabsConf.addPreference(butonType);
+        
+        
+        // Signal Name
+        if(mShowSignal){
+        	CharSequence[] adopted = arrayOfStrings.toArray(new CharSequence[arrayOfStrings.size()]);
+
+        	final ListPreference listPref = new ListPreference(this);
+        	listPref.setEntries(adopted);
+        	listPref.setEntryValues(adopted);
+        	listPref.setKey(mConf.buttSigKey(mTabNumber, mButtonNumber));
+        	listPref.setDialogTitle(R.string.change_signal);
+        	listPref.setTitle(R.string.set_signal);
+        	listPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+        		public boolean onPreferenceChange(Preference preference, Object newValue){
+        			listPref.setSummary((String)newValue);
+        			return true;
+        		}        	
+        	});
+        	tabsConf.addPreference(listPref);
+        	listPref.setSummary(listPref.getEntry());
+        }
 
         return root;
+        
+    }
+    
+
+	private void setMembers(String buttonType){
+		mButtonType = buttonType;
+      
+		if (mButtonType.equals("No button")){
+			mShowSignal = false;
+		} else if (mButtonType.equals("Text button")){
+			mShowSignal = true;
+		}
+		
+    	
     }
 }
 
