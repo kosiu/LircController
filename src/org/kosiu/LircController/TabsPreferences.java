@@ -26,6 +26,9 @@ public class TabsPreferences extends PreferenceActivity {
         super.onCreate(savedInstanceState);
 	    //setting configuration object 
 	    if(mConf==null)	mConf = new Conf(this);
+
+    	//number of actual tab
+    	mTabNumber = Integer.parseInt(getIntent().getAction());
 	    	
 	    //building preferences screen	
         setPreferenceScreen(createPreferenceHierarchy());
@@ -40,9 +43,6 @@ public class TabsPreferences extends PreferenceActivity {
     }
 
     private PreferenceScreen createPreferenceHierarchy() {
-
-    	//number of actual tab
-    	mTabNumber = Integer.parseInt(getIntent().getAction());
 
     	// Root
         PreferenceScreen root = getPreferenceManager().createPreferenceScreen(this);
@@ -66,7 +66,21 @@ public class TabsPreferences extends PreferenceActivity {
         tabsConf.addPreference(tabName);
         if(tabName.getText()==null) tabName.setText(mConf.tabName(mTabNumber));
         tabName.setSummary(tabName.getText());
-        
+
+        // Tab icon
+        final PreferenceScreen tabIcon = getPreferenceManager().createPreferenceScreen(this);
+        Uri uri = null;
+        tabIcon.setIntent(new Intent(mTabNumber.toString(), uri, this, IconsView.class));
+        tabIcon.setTitle(R.string.tab_icon);
+        tabIcon.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+        	public boolean onPreferenceChange(Preference preference, Object newValue){
+        		tabIcon.setSummary((String)newValue);
+				return true;
+        	}        	
+        });
+        tabsConf.addPreference(tabIcon);
+        tabIcon.setSummary(mConf.tabIcon(mTabNumber));
+       
         // Number of buttons 
         final EditTextPreference numberOfButtons = new EditTextPreference(this);
         numberOfButtons.getEditText().setKeyListener(new DigitsKeyListener());

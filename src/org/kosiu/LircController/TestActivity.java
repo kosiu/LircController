@@ -2,6 +2,7 @@ package org.kosiu.LircController;
 
 import android.app.TabActivity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.TabHost;
@@ -28,11 +29,18 @@ public class TestActivity extends TabActivity {
 
 	    //adding tabs names and quantity is read from configuration object
 	    for( Integer i=1; i<=mConf.nrTabs(); i++ ) {
-
+	    	//check for icon
+	    	Drawable icon = mConf.getIconDrawable(mConf.tabIcon(i));
+	    	
 	    	//reading tab name
 	    	String tabName = mConf.tabName(i);
-	    	TabSpec ts = tab_host.newTabSpec(tabName); 
-	    	ts.setIndicator(tabName);
+	    	TabSpec ts = tab_host.newTabSpec(tabName);
+	    	if(icon==null){
+	    		ts.setIndicator(tabName);
+	    	} else {
+	    		ts.setIndicator(tabName, icon);
+	    	}
+	    	
 
 	    	//setting tab content
 	    	Uri uri = null;

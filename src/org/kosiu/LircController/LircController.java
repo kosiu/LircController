@@ -35,7 +35,7 @@ public class LircController extends TabActivity {
                 .setIndicator(getText(R.string.audio), getResources().getDrawable(R.drawable.tab_amarok))
                 .setContent(R.id.audio));
         tabHost.addTab(tabHost.newTabSpec("video")
-                .setIndicator(getText(R.string.video), getResources().getDrawable(R.drawable.tab_kaffeine))
+                .setIndicator(getText(R.string.video), getResources().getDrawable(R.drawable.tab_smplayer))
                 .setContent(R.id.video));
         tabHost.addTab(tabHost.newTabSpec("leave")
                 .setIndicator(getText(R.string.leave), getResources().getDrawable(R.drawable.tab_shutdown))

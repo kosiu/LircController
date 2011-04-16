@@ -18,6 +18,7 @@ public class ButtonAdapter extends BaseAdapter {
         mActivity = activity;
         mTabNumber = tabNumber;
         mConf = new Conf(activity);
+        
     }
 
     public int getCount() {
