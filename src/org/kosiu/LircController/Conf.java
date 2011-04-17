@@ -56,12 +56,14 @@ public class Conf extends Object {
 			.concat(tabNumber.toString())
 			.concat(" Name");
 	}
-	//Key value for name of tab
+	
+	//Key value for icon of tab
 	public String tabIconKey(Integer tabNumber){
 		return new String("Tab_")
 			.concat(tabNumber.toString())
 			.concat(" Icon");
 	}
+	//Return the icon of given tab
 	public String tabIcon(Integer tab){
 		return mPref.getString(tabIconKey(tab),"");
 	}
@@ -112,6 +114,15 @@ public class Conf extends Object {
 	public String buttTyp(Integer tab, Integer button){	
 		return mPref.getString(buttTypKey(tab,button), "");
 	}
+	
+	//Img value for button name
+	public String buttImgKey(Integer tab, Integer button){
+		return tabBtn(tab, button).concat(" Img");
+	}
+	public String buttImg(Integer tab, Integer button){	
+		return mPref.getString(buttImgKey(tab,button), "");
+	}
+	
 	
 	//PRIVATE -----------------------------------------------------
 	

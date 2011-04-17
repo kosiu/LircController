@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -23,6 +25,8 @@ public class ButtonPreferences extends PreferenceActivity {
 	Conf mConf = null;
 	//Signal config dialog visibility
 	boolean mShowSignal = false;
+	boolean mShowImage = false;
+	boolean mShowName = false;
 	//Button type
 	String mButtonType = null;
 	Connection mConnection = null;
@@ -55,36 +59,53 @@ public class ButtonPreferences extends PreferenceActivity {
 
     private PreferenceScreen createPreferenceHierarchy() {
 
-        
-    	// Root
-        PreferenceScreen root = getPreferenceManager().createPreferenceScreen(this);
-
-        // Button Name
-        PreferenceCategory tabsConf = new PreferenceCategory(this);
-        tabsConf.setTitle(R.string.button);
-        root.addPreference(tabsConf);
-		              
-        final EditTextPreference buttonName = new EditTextPreference(this);
-        buttonName.setDialogTitle(R.string.buttonName);
-        buttonName.setKey(mConf.buttNameKey(mTabNumber, mButtonNumber));
-        buttonName.setTitle(R.string.buttonName);
-        buttonName.setSummary(mConf.buttName(mTabNumber, mButtonNumber));
-        buttonName.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
-        	public boolean onPreferenceChange(Preference preference, Object newValue){
-        		buttonName.setSummary((String)newValue);
-				return true;
-        	}        	
-        });
-        tabsConf.addPreference(buttonName);
-        if(buttonName.getText()==null) buttonName.setText(mConf.buttName(mTabNumber, mButtonNumber));
-
         List<String> pilots = mConnection.readPilots();
         Map<String, String> commandMap = mConnection.readKeys(pilots.get(0));
         Collection<String> arrayOfStrings = commandMap.keySet();
-               
-        // Button type
+    	
+    	// Root
+        PreferenceScreen root = getPreferenceManager().createPreferenceScreen(this);
+
+        PreferenceCategory tabsConf = new PreferenceCategory(this);
+        tabsConf.setTitle(R.string.button);
+        root.addPreference(tabsConf);
+
+        // Button Name
+        if(mShowName){			              
+	        final EditTextPreference buttonName = new EditTextPreference(this);
+	        buttonName.setDialogTitle(R.string.buttonName);
+	        buttonName.setKey(mConf.buttNameKey(mTabNumber, mButtonNumber));
+	        buttonName.setTitle(R.string.buttonName);
+	        buttonName.setSummary(mConf.buttName(mTabNumber, mButtonNumber));
+	        buttonName.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+	        	public boolean onPreferenceChange(Preference preference, Object newValue){
+	        		buttonName.setSummary((String)newValue);
+					return true;
+	        	}        	
+	        });
+	        tabsConf.addPreference(buttonName);
+	        if(buttonName.getText()==null) buttonName.setText(mConf.buttName(mTabNumber, mButtonNumber));
+        }
+
+        //Button Image
+        if(mShowImage){
+            final PreferenceScreen buttonIcon = getPreferenceManager().createPreferenceScreen(this);
+            Uri uri = null;
+            String str = mTabNumber.toString().concat(" ").concat(mButtonNumber.toString());
+            buttonIcon.setIntent(new Intent(str, uri, this, IconsView.class));
+            buttonIcon.setTitle(R.string.button_icon);
+            buttonIcon.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+            	public boolean onPreferenceChange(Preference preference, Object newValue){
+            		buttonIcon.setSummary((String)newValue);
+    				return true;
+            	}        	
+            });
+            tabsConf.addPreference(buttonIcon);
+            buttonIcon.setSummary(mConf.buttImg(mTabNumber, mButtonNumber));
+        }
         
-        CharSequence[] typeList = {"No button", "Text button"};
+        // Button type        
+        CharSequence[] typeList = {"No button", "Text button", "Image Button"};
         final ListPreference butonType = new ListPreference(this);
         butonType.setEntries(typeList);
         butonType.setEntryValues(typeList);
@@ -123,6 +144,7 @@ public class ButtonPreferences extends PreferenceActivity {
         	listPref.setSummary(listPref.getEntry());
         }
 
+       
         return root;
         
     }
@@ -133,8 +155,16 @@ public class ButtonPreferences extends PreferenceActivity {
       
 		if (mButtonType.equals("No button")){
 			mShowSignal = false;
+			mShowImage = false;
+			mShowName = false;
 		} else if (mButtonType.equals("Text button")){
 			mShowSignal = true;
+			mShowImage = false;
+			mShowName = true;
+		} else if (mButtonType.equals("Image Button")){
+			mShowSignal = false;
+			mShowImage = true;
+			mShowName = false;
 		}
 		
     	

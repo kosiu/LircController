@@ -14,11 +14,19 @@ public class IconAdapter extends BaseAdapter {
     Conf mConf = null;
     Activity mActivity;
     Integer mTabNumber = null;
+    Integer mButtonNumber = null;
+    
     
     public IconAdapter(Activity activity) {
         mActivity = activity;
         mConf = new Conf(activity);
-        mTabNumber = Integer.parseInt(activity.getIntent().getAction());
+        String[] tbl = activity.getIntent().getAction().split(" ");
+        mTabNumber = Integer.parseInt(tbl[0]);
+        mButtonNumber = 0;
+        if(tbl.length==2){
+        	mButtonNumber = Integer.parseInt(tbl[1]);
+        }
+
     }
 
     public int getCount() {
@@ -57,7 +65,11 @@ public class IconAdapter extends BaseAdapter {
     
     private void setPreferences(String iconName){
     	Editor edit = mConf.mPref.edit();
-    	edit.putString(mConf.tabIconKey(mTabNumber), iconName);
+    	if(mButtonNumber==0){
+    		edit.putString(mConf.tabIconKey(mTabNumber), iconName);
+    	} else {
+    		edit.putString(mConf.buttImgKey(mTabNumber, mButtonNumber), iconName);
+    	}
     	edit.commit();
     	mActivity.finish();
     }

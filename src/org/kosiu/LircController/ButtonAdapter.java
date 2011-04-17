@@ -1,11 +1,13 @@
 package org.kosiu.LircController;
 
+
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 
 public class ButtonAdapter extends BaseAdapter {
 
@@ -39,25 +41,36 @@ public class ButtonAdapter extends BaseAdapter {
 
     	String type = mConf.buttTyp(mTabNumber, actButton);
 
-    	if(type.equals("Text button")){
-	    	Button buttonView = null;
-	        buttonView = new Button(mActivity);
-	        buttonView.setLayoutParams(new GridView.LayoutParams(100, 80));
-	        buttonView.setPadding(4, 4, 4, 4);
-	              
-	        CharSequence caption = mConf.buttName(mTabNumber, actButton);
-	        buttonView.setText(caption);
-	        
+    	if(type.equals("Text button")||type.equals("Image Button")){
+    		//Create Button
+    		View view = null;
+
+    		if(type.equals("Text button")){
+    			Button buttonView = null;
+    			buttonView = new Button(mActivity);
+    			CharSequence caption = mConf.buttName(mTabNumber, actButton);
+    			buttonView.setText(caption);
+    			view = buttonView;
+    		} else {
+    			ImageButton buttonView = null;
+    			buttonView = new ImageButton(mActivity);
+    			buttonView.setImageDrawable(mConf.getIconDrawable(mConf.buttImg(mTabNumber, actButton)));
+    			view = buttonView; 
+    		}
+   			view.setLayoutParams(new GridView.LayoutParams(100, 80));
+   			view.setPadding(4, 4, 4, 4);
+
+	        //On Click
 	        final Connection connection = new Connection(mActivity);
 	        
-	        buttonView.setOnClickListener(new View.OnClickListener() {
+	        view.setOnClickListener(new View.OnClickListener() {
 	            public void onClick(View v) {
 	                String signal = mConf.buttSig(mTabNumber, actButton);
 	                if(!(signal.equals("")))
 	                	connection.seandLircCmd(signal);
 	            }
 	        });
-	        return buttonView;
+	        return view;
 
     	} 
     	
@@ -65,5 +78,7 @@ public class ButtonAdapter extends BaseAdapter {
 	    buttonView = new View(mActivity);
 	    return buttonView;
     }
+    
+
 
 }
