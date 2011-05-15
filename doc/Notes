@@ -1,0 +1,12 @@
+#summary Notes
+= TODO: =
+  # ~~documentation~~
+  # add GPL3 license to files
+  # additional icons from SD card
+  # putting activities into tab _"possible"?_
+  # lack of server exceptions
+  # orientation change
+  # implement long click for repeating
+  # implement long click for different signal
+  # nicer animations
+  # server communication in other thread

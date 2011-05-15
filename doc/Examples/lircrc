@@ -1,0 +1,49 @@
+begin
+   prog = mplayer
+   remote = Android
+   button = K_NEXT
+   config = sub_step +1
+end
+begin
+   prog = mplayer
+   remote = Android
+   button = K_PREV
+   config = sub_step -1
+end
+begin
+   prog = mplayer
+   remote = Android
+   button = K_FORWARD
+   config = seek +10
+end
+begin
+   prog = mplayer
+   remote = Android
+   button = K_REVIND
+   config = seek -10
+end
+begin
+   prog = mplayer
+   remote = Android
+   button = K_PAUSE
+   config = pause
+end
+begin
+   prog = irxevent
+   remote = Android
+   button = G_MUTE
+   config = Key XF86AudioMute kglobalaccel
+end
+begin
+   prog = irxevent
+   remote = Android
+   button = G_VOL_UP
+   config = Key XF86AudioRaiseVolume kglobalaccel
+end
+begin
+   prog = irxevent
+   remote = Android
+   button = G_VOL_DOWN
+   config = Key XF86AudioLowerVolume kglobalaccel
+end
+

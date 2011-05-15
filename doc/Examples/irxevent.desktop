@@ -1,0 +1,20 @@
+[Desktop Entry]
+Comment[pl]=
+Comment=
+Exec=/usr/bin/irxevent
+GenericName[pl]=
+GenericName=
+Icon=exec
+MimeType=
+Name[pl]=irxevent
+Name=irxevent
+Path=
+StartupNotify=false
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=none
+X-KDE-SubstituteUID=false
+X-KDE-Username=
+X-Ubuntu-Gettext-Domain=desktop_kdebase

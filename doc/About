@@ -1,0 +1,54 @@
+=About=
+This is my very first program in Java! It’s Android application which allows you sending signals to Lirc server through WiFi network.
+
+https://lh6.googleusercontent.com/_PASKd_9spQU/Tc_H7HfCQqI/AAAAAAAACDg/5c37ocWlifU/s288/ButtonsView.png https://lh3.googleusercontent.com/_PASKd_9spQU/Tc_H_GljjUI/AAAAAAAACDk/xstVeTHMeag/s288/PreferencesMain.png https://lh6.googleusercontent.com/_PASKd_9spQU/Tc_IBuYsjrI/AAAAAAAACDo/Jhe3s_RKlbw/s288/PreferencesTab.png
+
+=Source code=
+Source code is available at Gitorious repository: http://gitorious.org/lirccontroller
+=Installation=
+
+===Lirc server installation===
+Install package *lirc* for example by running command:
+{{{
+sudo apt-get install lirc
+}}}
+Now since server is installed, it's time to enable and configure it. You can do it by edit file:
+{{{
+/etc/lirc/hardware.conf
+}}}
+and change line:
+{{{
+REMOTE_LIRCD_ARGS=""
+}}}
+to
+{{{
+REMOTE_LIRCD_ARGS="--allow-simulate --listen"
+}}}
+and
+{{{
+START_LIRCD="false"
+}}}
+to
+{{{
+START_LIRCD="true"
+}}}
+it will enable sending simulate signals like android app do, and enable listening on TCP socket.
+Now you can copy your favorite pilot configuration file or you can use my file which is in doc directory or compressed examples file in download section (eg.):
+{{{
+sudo cp doc/lircd.conf /etc/lirc/lircd.conf
+}}}
+===Lirc client instalation===
+On kubuntu you can install:
+{{{
+sudo apt-get install kdelirc
+}}}
+this will add configuration window in kde system settings (input devices section). 
+You can configure it manually or copy those example files:
+{{{
+cp lircrc           ~/.lircrc            #lirc client conf
+cp kremotecontrolrc ~/.kde/share/config  #kde config
+cp irxevent.desktop ~/.kde/Autostart     #add irxevent to autostart
+}}}
+===Android instalation===
+Download {{{apk}}} file and install, then you can copy file {{{android.config}}} from {{{example.tgz}}} to phone SD card and import it from android app.
+Enyoy!
